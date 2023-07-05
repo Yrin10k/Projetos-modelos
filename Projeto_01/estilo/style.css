@@ -1,0 +1,301 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/*Boot CSS**/
+img{
+width: 100%;
+max-width: 300px;
+}
+
+.center{
+    max-width: 1280px;
+    padding: 0 2%;
+    margin: 0 auto; /*Centralizar site -- divs center*/
+}
+.w33{
+    width: 33.3%;
+padding: 0 10px;}
+.w50{
+    padding: 0 10px;
+    width: 50%;
+}
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+.clear{
+    clear: both; /*<-- limpar flutuação*/
+}
+
+/**Estilização do Site**/
+
+header{
+    padding: 20px 0; /**primeiro -> cima/baixo ; segundo -> direita/esquerda**/
+    background: #3D437A;
+}
+header .logo{
+font-size: 23px;
+text-transform: uppercase;
+color: white;
+}
+
+.mobile{
+    display: none;
+}
+
+nav.desktop ul{ 
+    /*O position relative, que em português significa relativo, é usado quando queremos alterar a posição de um elemento tendo como referência a posição inicial dele. Ao aplicarmos essa propriedade em um elemento, ele não muda de posição, pois já vai estar posicionado em sua posição de referência.*/
+    position: relative;
+    top: 6px;
+    list-style-type: none;
+}
+nav.desktop a:hover{
+    text-decoration: underline;
+}
+nav.desktop li{
+    display: inline-block; /*em linha sem quebra*/
+ padding: 0 30px;
+ font-weight: 300;
+}
+
+nav.desktop a{
+
+    font-size: 15px;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase; /*TRANSFORMA O TEXTO EM MAIÚSCULA*/
+}
+section.banner-principal{
+    width: 100%;
+    height: 600px;
+    background-image: url('../imagens/bg-form.jpg');
+background-size: cover; /*cobrir toda a tela*/
+position: relative;
+}
+.overlay{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;/*<-- Ordem / camada opu seja vai antes do formulário*/
+    background-color: rgba(51,51,51,0.4);
+}
+section.banner-principal form{
+   width: 98%;
+    max-width: 600px;
+    z-index: 2; /*<-- Ordem / camada opu seja vai depois do overlay; quanto maior o número, mais a cima ficará */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%); /*<-- para deixar o formulário centralizado*/
+      /*<--transform: translate(x,y) para deixar o formulário centralizado A função CSS translate() reposiciona um elemento na direção horizontal e/ou vertical.
+    ---Esta transformação é caracterizada por um vetor bidimensional. Suas coordenadas definem o quanto o elemento se move em cada direção.
+    */
+
+}
+
+section.banner-principal form h2{
+    color: white;
+    font-weight: 300;
+    font-size: 30px;
+    text-align: center;
+
+}
+
+section.banner-principal input[type="email"] {
+    
+    margin-top: 10px;
+    width: 100%;
+    height: 66px;
+    background: white;
+    color: #333;
+    font-size: 22px;
+    padding-left: 10px;
+}
+section.banner-principal input[type="submit"] {
+    
+    margin-top: 10px;
+    width: 100%;
+    height: 66px;
+    background: #00C59E;
+    color: white;
+   cursor: pointer; /*QUANDO PASSADO POR CIMA O CURSOR VIRA SYLE POINTER*/
+   font-size: 22px;
+   border: 0;
+}
+
+section.descricao-autor{
+padding: 30px 0;
+ 
+
+}
+section.descricao-autor h2{
+ font-size: 28px;
+font-weight: 400;
+color: #444;  
+}
+
+section.descricao-autor p{
+  font-size: 16px;
+  color: #444;  
+margin-top: 10px;
+}
+
+section.especialidades{
+    padding: 40px 0;
+    background: #E2E2E2;
+   
+}
+
+section.especialidades h2.title{
+   text-align: center;
+font-size: 30px;
+font-weight: 400;
+color: #999;
+}
+
+.box-especialidade{
+    margin: 40px 0;
+    text-align: center;
+    padding: 0 30px;
+}
+.box-especialidade h3{ /*ICONE*/
+ 
+color: #404580;
+
+font-size: 40px;
+}
+
+.box-especialidade h4{
+    font-size: 25px;
+    color: #BABABA;
+    font-weight: 300;
+}
+
+.box-especialidade p{
+    color: #444;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+section.extras{
+    padding: 30px 0;
+    background: #404580;
+}
+.servicos-container,.depoimentos-container{
+    padding: 0 50px;
+}
+section.extras .title{
+    color: white;
+    font-weight: 300;
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+
+.depoimento-single{
+    padding: 15px 0;
+    border-bottom: 1px solid #5056A0;
+}
+p.depoimento-descricao{
+    font-size: 15px;
+    color: white;
+    font-weight: 300;
+}
+p.nome-autor{
+    font-size: 15px;
+    color: white;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.servicos ul{
+margin: 20px 0;
+/*list-style-position: inside;/*PARA A BOLINHA DA LISTA FICAR PARA DENTRO / INSIDE -> DENTRO*/
+
+}
+.servicos li{
+    margin-bottom: 15px;
+    font-size: 15px;
+    color: white;
+    font-weight: 300;
+}
+
+footer{
+    background: #313462;
+    padding: 30px 0;
+}
+footer p{
+    color: white;
+    text-align: center;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+
+/* Responsivo*/
+@media screen and (max-width: 768px){
+    img{
+display: block;
+margin: 0 auto;
+max-width: 450px;
+    }
+
+    .w50{
+        padding: 20px;
+        width: 100%;
+    }
+    .w33{
+        width: 100%;
+        padding: 20px;
+    }
+    .box-especialidade{
+        margin: 0;
+        padding: 40px 20px;
+    }
+}
+
+@media screen and (max-width: 700px){
+    nav.desktop{
+        display: none;
+    }
+    nav.mobile{
+        display: block;
+    }
+    .botao-menu-mobile{
+        font-size: 24px;
+        cursor: pointer;
+        color: white;
+    }
+    nav.mobile ul{
+        top: 55px;
+        z-index: 3;
+        position: absolute;
+        left: 0;
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
+    nav.mobile li{
+font-size: 17px;
+font-weight: 300;
+width: 100%;
+display: block;
+background: white;
+border-bottom: 1px solid #ccc;
+padding: 8px 0;
+
+    }
+    nav.mobile li a{
+       display: block;
+        color: #444;
+        text-decoration: none;
+    }
+}
