@@ -15,7 +15,7 @@
     
    <header>
     <div class="center">
-        <div class="logo left">Logomarca</div><!--logo-->
+        <div class="logo left"><a href="/">Logomarca</a></div><!--logo-->
         <nav class="desktop right">
             <ul>
                 <li><a href="#">Home</a></li>
@@ -142,12 +142,11 @@
  </div><!--center-->
 </footer>
 <script src="js/jquery.js"></script>
-<script>
-/* $(function(){
+<script src="js/scripts.js"></script>
+</body>
+<!--$(function(){
      var mensagem = "Olá Mundo"; // Declaração de Variavéis 
      console.log(mensagem);
       alert(mensagem);
-     })  //nome da função no Jquery é $; */
-</script>
-</body>
+     })  //nome da função no Jquery é $; */-->
 </html>

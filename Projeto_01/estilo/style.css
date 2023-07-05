@@ -42,7 +42,11 @@ header{
 header .logo{
 font-size: 23px;
 text-transform: uppercase;
-color: white;
+
+}
+.logo a{
+    color: white;
+    text-decoration: none;
 }
 
 .mobile{
@@ -274,16 +278,19 @@ max-width: 450px;
         cursor: pointer;
         color: white;
     }
+    
     nav.mobile ul{
+        display: none;
         top: 55px;
         z-index: 3;
         position: absolute;
         left: 0;
-        display: block;
+        
         text-align: center;
         width: 100%;
     }
     nav.mobile li{
+        
 font-size: 17px;
 font-weight: 300;
 width: 100%;
@@ -294,8 +301,9 @@ padding: 8px 0;
 
     }
     nav.mobile li a{
+         
        display: block;
         color: #444;
-        text-decoration: none;
+      
     }
 }
