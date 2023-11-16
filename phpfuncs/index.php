@@ -1,6 +1,7 @@
 <?php 
-include("config.php"); 
+include("config.php");
 include("functions.php");
+$conn = connectDataBase(HOST,DATABASE,$user,$senha);
 ?>
 
 <!DOCTYPE html>

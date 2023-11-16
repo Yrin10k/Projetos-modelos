@@ -1,6 +1,7 @@
 <?php 
 // verify
 // caracter
+
 function vNumber($n) // is a number/ eh um numero ? / return true or false
 {
 // is a number ? return true or false // indentify strings 
@@ -10,30 +11,11 @@ elseif(!is_nan($n))
 {return true;}
 }
 // database
-//login
 function connectDataBase($nome_host,$nome_db,$user,$senha)
 {
     $conn = new PDO("mysql:host=$nome_host;dbname=$nome_db", "$user", "$senha");
     return $conn;
 }
-function vLogin($cn,$tbl,$camp, $lg, $pswd)
-{   // verify login
-    //the variable camp need be a array with two keys, contain the names of columns login and password
-    // if you want ignore the condicional, set "" for $cnd
- $sql = "SELECT * FROM $tbl WHERE $camp[0] = :lg AND $camp[1] = :pswd";
- $query = $cn->prepare($sql);
- $query->bindValue(":lg",$lg);
- $query->bindValue(":pswd",$pswd);
- $query->execute();
- $tmp =  $query->fetchALL(\PDO::FETCH_OBJ);
- return $tmp;
-}
-function vLogin_mod($cn,$tbl,$lg, $pswd,$cnd)
-{ // verify login
- $sql = "SELECT * FROM $tbl ";
-}
-
-
 //crud
 function selectAll($conn, $table, $verify_string)
 {   // return * values of your table in fetchALL in obj format, if you want return all without condicional, your can insired in $verify_string camp the value -> ""
@@ -78,6 +60,24 @@ function insertDefault($cn, $tb, $clmn,$values)
         $qry->execute();
         return $cn->lastInsertId();
     }
+    //login
+
+    function vLogin($cn,$tbl,$camp, $lg, $pswd)
+    {   // verify login
+        //the variable camp need be a array with two keys, contain the names of columns login and password
+        // if you want ignore the condicional, set "" for $cnd
+    $sql = "SELECT * FROM $tbl WHERE $camp[0] = :lg AND $camp[1] = :pswd";
+    $query = $cn->prepare($sql);
+    $query->bindValue(":lg",$lg);
+    $query->bindValue(":pswd",$pswd);
+    $query->execute();
+    $tmp =  $query->fetchALL(\PDO::FETCH_OBJ);
+    return $tmp;
+    }
+    function vLogin_mod($cn,$tbl,$lg, $pswd,$cnd)
+    { // verify login
+    $sql = "SELECT * FROM $tbl ";
+    }    
     function vSession_start()
     {// verify session exists, is'nt, start the session
         if(empty($_SESSION))
@@ -134,6 +134,17 @@ function insertDefault($cn, $tb, $clmn,$values)
         {
             securityStay($nome_sessao_login_ativo,$location_pagina_login);
             // caso seja verificado retorna o nome do login do cliente antes dado na funcao de logar()
+        }
+    }
+    // logoff 
+    function logOff($pagina_retorno)
+    {
+        
+        if(empty($_SESSION))
+        {
+            vSession_start();
+            session_destroy();
+            header("location: $pagina_retorno");
         }
     }
     
