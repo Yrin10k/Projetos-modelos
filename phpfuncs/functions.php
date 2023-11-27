@@ -2,6 +2,7 @@
 // verify
 // caracter
 
+
 function vNumber($n) // is a number/ eh um numero ? / return true or false
 {
 // is a number ? return true or false // indentify strings 
@@ -10,6 +11,9 @@ if(is_string($n))
 elseif(!is_nan($n))
 {return true;}
 }
+
+
+
 // database
 function connectDataBase($nome_host,$nome_db,$user,$senha)
 {
@@ -17,17 +21,78 @@ function connectDataBase($nome_host,$nome_db,$user,$senha)
     return $conn;
 }
 //crud
-function selectAll($conn, $table, $verify_string)
-{   // return * values of your table in fetchALL in obj format, if you want return all without condicional, your can insired in $verify_string camp the value -> ""
-    $sql = "SELECT * FROM $table WHERE :v";
+function selectAll_obj($conn, $table)
+{   // return * values of your table in fetchALL in obj format"
+    $sql = "SELECT * FROM $table";
     $query = $conn->prepare($sql);
-    $query->bindValue(":v",$verify_string);
     $query->execute();
     return $query->fetchALL(\PDO::FETCH_OBJ);
 }
+
+function selectAll_array($conn, $table)
+{   // return * values of your table in fetchALL in array format"
+    $sql = "SELECT * FROM $table";
+    $query = $conn->prepare($sql);
+    $query->execute();
+    return $query->fetchALL(\PDO::FETCH_ASSOC);
+}
+function select(){
+    $sql = "";
+}
+
+function verifyInstance($conn,$param, $table, $columns, $values){
+    // $conn -> conection ; $param -> the lines where you want return ;
+    // $conn -> conexao com o banco de dados; $param -> as linhas(tuplas) que voce deseja retornar como verificacao do banco de dados, aconselhavel deixar como *(all ou tudo);
+    // verify if the value are in the columns inserted in the array $columns;
+    // verifica se os valores estao nas colunas inseridas, respectivamente   
+    // $columns and $values need to in array format
+    // $columns e $values precisam estar no formato de array
+    switch ($param) {   
+        case 'tudo':
+            $param = "*";
+            break;
+        
+        case 'Tudo':
+            $param = "*";
+        break;
+        
+        case 'all':
+            $param = "*";
+        break;
+
+        case 'All':
+            $param = "*";
+        break;
+    }
+    $sql = "SELECT $param FROM $table WHERE ";
+    $cnt = count($values);
+    $i = 0;
+    while ($i < $cnt) {
+        $vl_cout = "\"$values[$i]\"";
+        if($i == ($cnt-1)){$sql = $sql."$columns[$i] = "." $vl_cout "; $i = $cnt;}
+        if($i < $cnt){
+        $sql = $sql."$columns[$i] = "." $vl_cout AND ";
+        }
+        $i++;
+    }
+    $qry = $conn->prepare($sql);
+    $qry->execute();
+    $tmp3 = $qry->fetch(\PDO::FETCH_OBJ);
+    if($tmp3 == null){
+        return false;
+    }else{
+        return true;
+    }
+}
 // inserction 
 function insertDefault($cn, $tb, $clmn,$values)
-{
+{   // erros codes in the last line of the function
+    //$cn -> connection database ;$tb -> table; $clmn -> columnns 
+    if(verifyInstance($cn, "*", $tb,$clmn,$values)!=true)
+    {
+        return " ERROR 1 ";
+    }
+    
     // PAREI AJEITANDO O ARRAY DAS COLUNAS
     $tmp1 = "";
     $t = 0;
@@ -59,9 +124,10 @@ function insertDefault($cn, $tb, $clmn,$values)
         }
         $qry->execute();
         return $cn->lastInsertId();
+        // ERROR 1 ; THE VALUES EXISTS IN THE DATABASE !
+        // IF YOU WANT THE VALUES REPEAT; USE THE FUNCTION insertDefault_repeat();
     }
     //login
-
     function vLogin($cn,$tbl,$camp, $lg, $pswd)
     {   // verify login
         //the variable camp need be a array with two keys, contain the names of columns login and password

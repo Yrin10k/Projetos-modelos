@@ -2,8 +2,14 @@
 include("config.php");
 include("functions.php");
 $conn = connectDataBase(HOST,DATABASE,$user,$senha);
+$get = (isset($_GET["add"])) ? isset($_GET["add"]) : null ; 
+$arr = array("nome","qtd","info");
+$values = array("Testekk2",10,"kakkk");
+if($get == 1){
+    //insertDefault($conn,"produtos",$arr,$values);
+   if(verifyInstance($conn,"all","produtos",$arr,$values)){echo "salve";}else{echo "Deu ruim";};
+} 
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -12,11 +18,8 @@ $conn = connectDataBase(HOST,DATABASE,$user,$senha);
     <title>Funcoes Publicas</title>
 </head>
 <body>
-<h1>login</h1>
-<form action="verificar_login.php" method="post">
-<label for="">email:</label><input type="email" name="email" id=""><br>
-<label for="">senha:</label><input type="password" name="senha" id=""><br>
-<br><input type="submit" value="Entrar">
+<form method="get" action="">
+    <a href="http://localhost/projetos/phpfuncs/?add=1">Insert Default</a>
 </form>
 </body>
 </html>
