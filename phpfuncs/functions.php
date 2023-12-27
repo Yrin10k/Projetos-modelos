@@ -27,6 +27,20 @@ function selectAll($conn, $table, $typeReturn)
     return $ty;
     }
 }
+//
+function selectAllParam($conn, $param, $table, $typeReturn)
+{    // $typeReturn -> return OBJ or ARRAY, 1 or 2 
+     // return * values of your table in fetchALL in obj format"
+    if($typeReturn != 1 && $typeReturn != 2){  die("<b>ERROR FUNCTION</b> the typeReturn is diferent of 1 or 2, Select a Type"); }
+    else{ 
+    $sql = "SELECT $param FROM $table";
+    $query = $conn->prepare($sql);
+    $query->execute();
+    $ty = ($typeReturn == 1) ? $query->fetchALL(\PDO::FETCH_OBJ) : $query->fetchALL(\PDO::FETCH_ASSOC) ;
+    return $ty;
+    }
+}
+
 function selectOnceEqual($conn,$param, $table, $column, $value, $typeReturn){
     // $typeReturn -> return OBJ or ARRAY, 1 or 2 
      // return one line values of your table in fetchALL in obj format"
@@ -52,6 +66,15 @@ function selectOnceDiferent($conn,$param, $table, $column, $value, $typeReturn){
      $ty = ($typeReturn == 1) ? $query->fetch(\PDO::FETCH_OBJ) : $query->fetchALL(\PDO::FETCH_ASSOC) ;
      return $ty;
     }
+}
+function selectPerTwoValues_Equals($conn, $table, $column1, $column2, $first_value,$second_value)
+{   // return * values of your table in fetchALL in obj format, if you want return all without condicional, your can insired in $verify_string camp the value -> ""
+    $sql = "SELECT * FROM $table WHERE $column1 = :v1 AND $column2 = :v2";
+    $query = $conn->prepare($sql);
+    $query->bindValue(":v1",$first_value);
+    $query->bindValue(":v2",$second_value);
+    $query->execute();
+    return $query->fetchALL(\PDO::FETCH_OBJ);
 }
 function verifyInstanceDefault($conn,$param, $table, $columns, $values){
     // $conn -> conection ; $param -> the lines where you want return ;
@@ -271,7 +294,7 @@ function insertDefault($cn, $tb, $clmn,$values)
     //$cn -> connection database ;$tb -> table; $clmn -> columnns 
     if(verifyInstanceDefault($cn, "*", $tb,$clmn,$values)!=false)
     {
-        die("ERROR 1");
+        die("functionsphp ERROR 1");
     }
     $tmp1 = "";
     $t = 0;
@@ -356,7 +379,7 @@ function insertDefault($cn, $tb, $clmn,$values)
         $qry->execute();
         return true;
     }
-    function updateById($conn, $table, $clmn, $vle,$column_id, $id){
+    function updateById($conn, $table, $clmn, $vle, $column_id, $id){
     // $conn -> conexao com o Banco de Dados / Conection with the DataBase
     // $clmn -> PRECISA ESTAR EM FORMATO DE ARRAY | NEED TO STAY IN ARRAY FORMAT Colunas que voce deseja alterar //columns who you wish to alter OBS -> Devem ser ordenados respectivamente de acordo com a ordem dos Valores // They must be ordered respectively according to the order of Values
     // $vle -> PRECISA ESTAR EM FORMATO DE ARRAY | NEED TO STAY IN ARRAY FORMAT Valores a setar // values to set // OBS -> Devem ser ordenados respectivamente de acordo com a ordem das colunas // They must be sorted respectively according to the order of the columns
@@ -390,7 +413,21 @@ function insertDefault($cn, $tb, $clmn,$values)
         $query->bindValue("id",$id);
         $query->execute();
     }
-    //login
+
+    // operations in database
+    function maxValue($conn, $param, $table,)
+    {   // return the max value in the param max_value
+        // $param is the you want return, type * for return all values in table
+        // $typeReturn -> return OBJ or ARRAY, 1 or 2 
+        // return * values of your table in fetchALL in obj format"
+        $sql = "SELECT MAX($param) as max_value FROM $table";
+        $query = $conn->prepare($sql);
+        $query->execute();
+        $ty = $query->fetchALL(\PDO::FETCH_OBJ);
+        return $ty[0]->max_value;
+    }
+
+    //LOGIN --- LOGIN
     function vLogin($cn,$tbl,$camp, $lg, $pswd)
     {   // verify login
         //the variable camp need be a array with two keys, contain the names of columns login and password
@@ -403,10 +440,6 @@ function insertDefault($cn, $tb, $clmn,$values)
     $tmp =  $query->fetchALL(\PDO::FETCH_OBJ);
     return $tmp;
     }
-    function vLogin_mod($cn,$tbl,$lg, $pswd,$cnd)
-    { // verify login
-    $sql = "SELECT * FROM $tbl ";
-    }    
     function vSession_start()
     {// verify session exists, is'nt, start the session
         if(empty($_SESSION))
@@ -440,6 +473,29 @@ function insertDefault($cn, $tb, $clmn,$values)
         }
     }
         }
+        function vLogin_model($cn,$tbl,$camp, $lg, $pswd)
+        {   // verify login
+            //the variable camp need be a array with two keys, contain the names of columns login and password
+            // if you want ignore the condicional, set "" for $cnd
+        $sql = "SELECT * FROM $tbl WHERE $camp[0] = :lg AND $camp[1] = :pswd";
+        $query = $cn->prepare($sql);
+        $query->bindValue(":lg",$lg);
+        $query->bindValue(":pswd",$pswd);
+        $query->execute();
+        $tmp =  $query->fetch(\PDO::FETCH_OBJ);
+        return $tmp;
+        }
+    
+        function Logar_model($conexao,$tabela,$colunas_array,$login,$senha)
+    {
+            $login = $login;
+            $senha = $senha;
+            $tbl = $tabela;
+            $camp[0] = $colunas_array[0];
+            $camp[1] = $colunas_array[1];
+            $tmp = vLogin_model($conexao,$tbl,$camp, $login, $senha);
+            return $tmp;
+    }
 
     function securityStay($nome_sessao_login_ativo,$location_pagina_login)
     {
@@ -476,4 +532,81 @@ function insertDefault($cn, $tb, $clmn,$values)
         }
     }
     
+?>
+
+<!-- UPDATE FILES -->
+<?php 
+    function upFile($input_file, $path_dest, $max_size_file, $array_mime){
+        // this function is limited for one file per send;
+        // is recomend you create a const variable path
+        // the $array_mime format must be like this -> [".png", ".zip"]
+        
+        // verify the file
+       $nome_arquivo = $input_file['name'];
+       $tamanho_arquivo = $input_file['size'];
+       $extensao = strchr(substr($input_file['name'], -5), ".");
+       $caminho_tmp =  $path_dest."\\".$nome_arquivo;
+       if(!in_array($extensao,$array_mime))
+       {    
+           //invalid mime!
+           return false;//die("the extension mime is invalid".substr($input_file['name'], -5));
+       }
+       elseif($tamanho_arquivo > $max_size_file)
+       {    
+          // archive to much big
+            return false;
+       }
+       elseif(file_exists($caminho_tmp))
+       {     
+            //the file exist
+            return false;
+       }
+       else
+       {   
+           // update the file step
+           $arquivo_temporario         = $input_file['tmp_name'];
+           if(is_dir($path_dest)){  
+               if(move_uploaded_file($arquivo_temporario,$caminho_tmp))
+               {
+                return $nome_arquivo;
+               }
+               else
+               {   
+                   return false;//die("erro ao enviar o arquivo <hr>".$arquivo_temporario."  -- <b>TO</b> --  ".$path_dest."<hr> code :". $input_file['error']); // nao foi possivel enviar o arquivo
+               }
+            }
+            else{
+                die("the destinate path is invalid or not a dir");
+            }
+       }        
+    }
+    function verifyFile($input_file, $path_dest, $max_size_file, $array_mime){
+        // is recomend you create a const variable path
+        // the $array_mime format must be like this -> [".png", ".zip"]
+
+        // verify the file
+       $nome_arquivo = $input_file['name'];
+       $tamanho_arquivo = $input_file['size'];
+       $extensao = strchr(substr($input_file['name'], -5), ".");
+       $caminho_tmp =  $path_dest."\\".$nome_arquivo;
+       if(!in_array($extensao,$array_mime))
+       {    
+           //invalid mime!
+           return false; //die("the extension mime is invalid".substr($input_file['name'], -5));
+       }
+       elseif($tamanho_arquivo > $max_size_file)
+       {    
+          // archive to much big
+           return false;
+       }
+       elseif(file_exists($caminho_tmp))
+       {   
+            //the file exist
+           return false;
+       }
+       else
+       {
+           return true;
+       }        
+    }
 ?>
